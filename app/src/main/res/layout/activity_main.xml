@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<import type="android.view.View" />
+
+		<variable
+			name="OnClickListener"
+			type="android.view.View.OnClickListener" />
+
+		<variable
+			name="OnLongClickListener"
+			type="android.view.View.OnLongClickListener" />
+
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".MainActivity">
+
+		<TextView
+			android:id="@+id/api_key_tv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:text="API Key from skyway"
+			android:textSize="24sp"
+			app:layout_constraintBottom_toTopOf="@+id/api_key_edittext"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintVertical_bias="1.0" />
+
+		<EditText
+			android:id="@+id/api_key_edittext"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="8dp"
+			android:layout_marginEnd="8dp"
+			android:ems="10"
+			android:importantForAutofill="no"
+			android:inputType="text"
+			android:textSize="24sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintVertical_bias="0.3" />
+
+		<Button
+			android:id="@+id/one_one_p2p_btn"
+			android:layout_width="150dp"
+			android:layout_height="wrap_content"
+			android:text="1:1/P2P"
+			android:textSize="24sp"
+			android:onClick="@{OnClickListener}"
+			app:layout_constraintBottom_toTopOf="@+id/multi_p2p_btn"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/api_key_edittext" />
+
+		<Button
+			android:id="@+id/multi_p2p_btn"
+			android:layout_width="150dp"
+			android:layout_height="wrap_content"
+			android:text="n:n/P2P"
+			android:textSize="24sp"
+			android:onClick="@{OnClickListener}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/api_key_edittext" />
+
+		<Button
+			android:id="@+id/multi_sfu_btn"
+			android:layout_width="150dp"
+			android:layout_height="wrap_content"
+			android:text="n:n/SFU"
+			android:textSize="24sp"
+			android:onClick="@{OnClickListener}"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/multi_p2p_btn" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

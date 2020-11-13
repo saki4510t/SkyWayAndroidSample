@@ -1,0 +1,12 @@
+<resources>
+	<string name="app_name">SkywayTestApp</string>
+	<string name="title_activity_p2p_video_chat">VideoChat</string>
+	<string name="title_activity_mesh_video_chat">MeshVideoChat</string>
+	<string name="title_activity_sfu_video_chat">SfuVideoChat</string>
+
+	<string name="label_api_key">"Enter your API key of SkyWay"</string>
+	<string name="call">Make Call</string>
+	<string name="hangup">Hang up</string>
+	<string name="join">Join Room</string>
+	<string name="leave">Leave Room</string>
+</resources>

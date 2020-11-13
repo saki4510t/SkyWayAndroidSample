@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+
+android {
+	compileSdkVersion versionCompiler
+	buildToolsVersion versionBuildTool
+
+	compileOptions {
+		sourceCompatibility javaSourceCompatibility
+		targetCompatibility javaTargetCompatibility
+	}
+
+	defaultConfig {
+		minSdkVersion 21
+		targetSdkVersion versionTarget
+
+		applicationId "com.serenegiant.skywaytest"
+		versionCode versionCodeNum
+		versionName versionNameString
+
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+		def properties = new Properties()
+		properties.load(new File(rootDir.absolutePath + "/local.properties").newDataInputStream())
+
+		buildConfigField "String", "SKYWAY_API_KEY", "\"${properties.getProperty('SKYWAY_API_KEY', '')}\""
+		buildConfigField "String", "SKYWAY_DOMAIN", "\"${properties.getProperty('SKYWAY_DOMAIN', 'localhost')}\""
+	}
+
+	applicationVariants.all { variant ->
+		variant.outputs.all { output ->
+			outputFileName = "SkyWayTest_${variant.buildType.name}_r${variant.versionName}_v${variant.versionCode}.apk"
+		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
+
+	dataBinding {
+		enabled = true
+	}
+
+}
+
+dependencies {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+	testImplementation "junit:junit:${junitVersion}"
+	androidTestImplementation "androidx.test:runner:${androidXTestRunnerVersion}"
+	androidTestImplementation "androidx.test.espresso:espresso-core:${androidXEspressoVersion}"
+
+	implementation "androidx.appcompat:appcompat:${androidXVersion}"
+	implementation "androidx.legacy:legacy-support-v4:${androidXLegacyV4}"
+	implementation "com.google.android.material:material:${androidXMaterial}"
+	implementation "androidx.constraintlayout:constraintlayout:${androidXConstraint}"
+
+	implementation project(':skyway-sdk')
+}

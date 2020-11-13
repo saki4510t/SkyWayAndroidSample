@@ -1,0 +1,2 @@
+rootProject.name='SkyWayTest'
+include ':app', ':skyway-sdk'
