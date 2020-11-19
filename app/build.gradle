@@ -23,6 +23,7 @@ android {
 		properties.load(new File(rootDir.absolutePath + "/local.properties").newDataInputStream())
 
 		buildConfigField "String", "SKYWAY_API_KEY", "\"${properties.getProperty('SKYWAY_API_KEY', '')}\""
+		buildConfigField "String", "SKYWAY_SECRET_KEY", "\"${properties.getProperty('SKYWAY_SECRET_KEY', '')}\""
 		buildConfigField "String", "SKYWAY_DOMAIN", "\"${properties.getProperty('SKYWAY_DOMAIN', 'localhost')}\""
 	}
 
@@ -56,6 +57,17 @@ dependencies {
 	implementation "androidx.legacy:legacy-support-v4:${androidXLegacyV4}"
 	implementation "com.google.android.material:material:${androidXMaterial}"
 	implementation "androidx.constraintlayout:constraintlayout:${androidXConstraint}"
+
+	implementation "com.google.code.gson:gson:${gsonVersion}"
+	implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+	implementation "com.squareup.okhttp3:mockwebserver:${okHttpVersion}"
+	implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+	implementation "com.squareup.retrofit2:retrofit:${retrofit2Version}"
+	implementation "com.squareup.retrofit2:converter-gson:${retrofit2Version}"
+	implementation ("io.socket:socket.io-client:${socketIOClientJavaVersion}") {
+	  // excluding org.json which is provided by Android
+	  exclude group: 'org.json', module: 'json'
+	}
 
 	implementation project(':skyway-sdk')
 }

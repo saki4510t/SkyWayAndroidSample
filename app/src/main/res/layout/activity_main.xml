@@ -15,48 +15,107 @@
 			name="OnLongClickListener"
 			type="android.view.View.OnLongClickListener" />
 
+		<variable
+			name="peerAuthEnabled"
+			type="Boolean" />
+		<variable
+			name="buttonEbavled"
+			type="Boolean" />
 	</data>
 
-	<androidx.constraintlayout.widget.ConstraintLayout
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_margin="4dp"
+		android:orientation="vertical"
 		tools:context=".MainActivity">
 
 		<TextView
 			android:id="@+id/api_key_tv"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="16dp"
-			android:text="API Key from skyway"
-			android:textSize="24sp"
-			app:layout_constraintBottom_toTopOf="@+id/api_key_edittext"
+			android:text="@string/label_api_key"
+			android:textSize="16sp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintVertical_bias="1.0" />
+			app:layout_constraintTop_toTopOf="parent" />
 
 		<EditText
 			android:id="@+id/api_key_edittext"
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="8dp"
 			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
 			android:ems="10"
 			android:importantForAutofill="no"
 			android:inputType="text"
 			android:textSize="24sp"
-			app:layout_constraintBottom_toBottomOf="parent"
+			android:hint="@string/label_api_key"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintVertical_bias="0.3" />
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<CheckBox
+			android:id="@+id/peer_auth_checkbox"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:checked="@{peerAuthEnabled}"
+			android:text="@string/label_enable_peer_auth"
+			android:textSize="16sp"/>
+
+		<TextView
+			android:id="@+id/secret_key_tv"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/label_secret_key"
+			android:textSize="16sp"
+			android:visibility="@{peerAuthEnabled ? View.VISIBLE : View.GONE}"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<EditText
+			android:id="@+id/secret_key_edittext"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
+			android:ems="10"
+			android:importantForAutofill="no"
+			android:inputType="text"
+			android:textSize="24sp"
+			android:hint="@string/label_secret_key"
+			android:visibility="@{peerAuthEnabled ? View.VISIBLE : View.GONE}"
+			app:layout_constraintBottom_toTopOf="@+id/one_one_p2p_btn"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/note_secret_key1"
+			android:textSize="16sp"
+			android:textColor="#ffff0000"
+			android:visibility="@{peerAuthEnabled ? View.VISIBLE : View.GONE}"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/note_secret_key2"
+			android:textSize="12sp"
+			android:textColor="#ffff0000"
+			android:visibility="@{peerAuthEnabled ? View.VISIBLE : View.GONE}"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
 
 		<Button
 			android:id="@+id/one_one_p2p_btn"
-			android:layout_width="150dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_margin="2dp"
 			android:text="1:1/P2P"
 			android:textSize="24sp"
+			android:enabled="@{buttonEbavled}"
 			android:onClick="@{OnClickListener}"
 			app:layout_constraintBottom_toTopOf="@+id/multi_p2p_btn"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -65,10 +124,13 @@
 
 		<Button
 			android:id="@+id/multi_p2p_btn"
-			android:layout_width="150dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_margin="2dp"
 			android:text="n:n/P2P"
 			android:textSize="24sp"
+			android:enabled="@{buttonEbavled}"
 			android:onClick="@{OnClickListener}"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -77,14 +139,17 @@
 
 		<Button
 			android:id="@+id/multi_sfu_btn"
-			android:layout_width="150dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_margin="2dp"
 			android:text="n:n/SFU"
 			android:textSize="24sp"
+			android:enabled="@{buttonEbavled}"
 			android:onClick="@{OnClickListener}"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/multi_p2p_btn" />
-	</androidx.constraintlayout.widget.ConstraintLayout>
+	</LinearLayout>
 </layout>

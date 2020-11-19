@@ -57,6 +57,11 @@ ext {
 
 	skywaySDKVersion = '2.0.3'
 
+	gsonVersion = '2.8.5'
+	okHttpVersion = '3.12.1'
+	retrofit2Version = '2.4.0'
+	socketIOClientJavaVersion = '1.0.0'
+
 	versionCodeNum = 1
 	versionNameString = '0.0.0'
 }

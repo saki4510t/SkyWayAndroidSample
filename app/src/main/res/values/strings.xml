@@ -4,7 +4,16 @@
 	<string name="title_activity_mesh_video_chat">MeshVideoChat</string>
 	<string name="title_activity_sfu_video_chat">SfuVideoChat</string>
 
-	<string name="label_api_key">"Enter your API key of SkyWay"</string>
+	<string name="label_api_key">Enter your API key of SkyWay</string>
+	<string name="label_secret_key">Enter your Secret key of SkyWay</string>
+	<string name="label_enable_peer_auth">Enable peer authentification</string>
+	<string name="note_secret_key1">
+		SkyWayのアプリケーションの設定で「APIキー認証を利用する」にチェックを入れておくこと。
+	</string>
+	<string name="note_secret_key2">
+		このサンプルはOkkHTTPのモックサーバーを使って端末上でピア認証/クレデンシャル生成するので
+		共有プレファレンスに保存しているけど、本来はセキュアなサーバー上でピア認証/クレデンシャル生成を
+		しないといけないので端末にSkyWayの秘密鍵を入力・保存することはない。</string>
 	<string name="call">Make Call</string>
 	<string name="hangup">Hang up</string>
 	<string name="join">Join Room</string>
