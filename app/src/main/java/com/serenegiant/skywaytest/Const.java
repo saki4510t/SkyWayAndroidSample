@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.serenegiant.skywaytest.api.APIUtils;
 import com.serenegiant.utils.KeyStoreUtils;
 import com.serenegiant.utils.ObfuscatorException;
 
@@ -27,6 +28,7 @@ public class Const {
 	/*package*/ static final String PREF_KEY_ROOM_SFU = "PREF_KEY_ROOM_SFU";
 	/*package*/ static final String PREF_KEY_ROOM_MESH = "PREF_KEY_ROOM_MESH";
 	private static final String PREF_KEY_PEER_AUTH_ENABLED = "PREF_KEY_PEER_AUTH_ENABLED";
+	public static final String PREF_KEY_PEER_ID = "PREF_KEY_PEER_ID";
 
 	/*package*/ static final String DOMAIN = BuildConfig.SKYWAY_DOMAIN;
 
@@ -40,11 +42,11 @@ public class Const {
 	 * @return
 	 */
 	/*package*/ static boolean isPeerAuthEnabled(@NonNull final Context context) {
-		return getPreferences(context).getBoolean(PREF_KEY_PEER_AUTH_ENABLED, true);
+		return APIUtils.getPreferences(context).getBoolean(PREF_KEY_PEER_AUTH_ENABLED, true);
 	}
 
 	/*package*/ static void setPeerAuthEnabled(@NonNull final Context context, final boolean enabled) {
-		getPreferences(context)
+		APIUtils.getPreferences(context)
 			.edit()
 			.putBoolean(PREF_KEY_PEER_AUTH_ENABLED, enabled)
 			.apply();
@@ -81,7 +83,7 @@ public class Const {
 	@Nullable
 	/*package*/ static String loadAPIKey(@NonNull final Context context) {
 		final String lastApiKey
-			= getPreferences(context)
+			= APIUtils.getPreferences(context)
 				.getString(PREF_KEY_API_KEY, null);
 		if (!TextUtils.isEmpty(lastApiKey)) {
 			return lastApiKey;
@@ -96,7 +98,7 @@ public class Const {
 	 * @param apiKey
 	 */
 	/*package*/ static void saveAPIKey(@NonNull final Context context, final String apiKey) {
-		getPreferences(context)
+		APIUtils.getPreferences(context)
 			.edit()
 			.putString(PREF_KEY_API_KEY, apiKey)
 			.apply();
@@ -114,7 +116,7 @@ public class Const {
 	@Nullable
 	public static String loadSecretKey(@NonNull final Context context) {
 		String lastSecretKey = null;
-		final SharedPreferences preferences = getPreferences(context);
+		final SharedPreferences preferences = APIUtils.getPreferences(context);
 		if (preferences.contains(PREF_KEY_SECRET_KEY)) {
 			final String encrypted
 				= preferences.getString(PREF_KEY_SECRET_KEY, null);
@@ -150,16 +152,10 @@ public class Const {
 			encrypted = null;
 		}
 		if (!TextUtils.isEmpty(encrypted)) {
-			getPreferences(context).edit().putString(PREF_KEY_SECRET_KEY, encrypted).apply();
+			APIUtils.getPreferences(context).edit().putString(PREF_KEY_SECRET_KEY, encrypted).apply();
 		} else {
-			getPreferences(context).edit().remove(PREF_KEY_SECRET_KEY).apply();
+			APIUtils.getPreferences(context).edit().remove(PREF_KEY_SECRET_KEY).apply();
 		}
 	}
 
-//--------------------------------------------------------------------------------
-	@NonNull
-	public static SharedPreferences getPreferences(@NonNull final Context context) {
-		return context.getSharedPreferences(
-			context.getPackageName(), Context.MODE_PRIVATE);
-	}
 }

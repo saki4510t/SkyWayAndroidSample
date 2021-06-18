@@ -5,6 +5,7 @@
 	<string name="title_activity_sfu_video_chat">SfuVideoChat</string>
 
 	<string name="label_api_key">Enter your API key of SkyWay</string>
+	<string name="label_peer_id">Enter your Peer Id(optional)</string>
 	<string name="label_secret_key">Enter your Secret key of SkyWay</string>
 	<string name="label_enable_peer_auth">Enable peer authentification</string>
 	<string name="note_secret_key1">

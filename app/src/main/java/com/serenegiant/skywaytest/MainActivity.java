@@ -3,7 +3,9 @@ package com.serenegiant.skywaytest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.serenegiant.skywaytest.api.APIUtils;
 import com.serenegiant.skywaytest.databinding.ActivityMainBinding;
 
 import static com.serenegiant.skywaytest.Const.*;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 		// 最後に使用したskyway APIキーを共有プレファレンスから読み込む
 		mBinding.apiKeyEdittext.setText(loadAPIKey(this));
 		mBinding.setOnClickListener(new View.OnClickListener() {
+			@SuppressLint("NonConstantResourceId")
 			@Override
 			public void onClick(final View v) {
 				if (isPeerAuthEnabled(MainActivity.this)) {
@@ -51,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
 				if (TextUtils.isEmpty(apiKey)) {
 					showError("APIキーがセットされていないよ");
 					return;
+				}
+				final String peerId = mBinding.peerIdEdittext.getText().toString();
+				if (!TextUtils.isEmpty(peerId)) {
+					final SharedPreferences preferences = APIUtils.getPreferences(MainActivity.this);
+					preferences.edit().putString(Const.PREF_KEY_PEER_ID, peerId).apply();
 				}
 				Intent intent = null;
 				switch (v.getId()) {
@@ -114,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 		updateButtonState();
+
+		mBinding.peerIdEdittext.setText(APIUtils.getPeerId(MainActivity.this));
 	}
 
 	private void updateButtonState() {

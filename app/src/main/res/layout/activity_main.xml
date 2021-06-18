@@ -54,6 +54,30 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent" />
 
+		<TextView
+			android:id="@+id/peer_id_tv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/label_peer_id"
+			android:textSize="16sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<EditText
+			android:id="@+id/peer_id_edittext"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
+			android:ems="10"
+			android:importantForAutofill="no"
+			android:inputType="text"
+			android:textSize="24sp"
+			android:hint="@string/label_peer_id"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
 		<CheckBox
 			android:id="@+id/peer_auth_checkbox"
 			android:layout_width="match_parent"

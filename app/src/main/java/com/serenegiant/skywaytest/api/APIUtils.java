@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.serenegiant.skywaytest.Const;
 import com.serenegiant.utils.KeyStoreUtils;
 import com.serenegiant.utils.ObfuscatorException;
 
@@ -33,8 +34,6 @@ public class APIUtils {
 	public static final int RESPONSE_UNKNOWN = -9999;
 
 	//--------------------------------------------------------------------------------
-	private static final String PREF_KEY_PEER_ID = "PREF_KEY_PEER_ID";
-
 	/**
 	 * ピア認証を行う際のピアIDを取得する
 	 * XXX ピア認証を行う場合はPeerの生成＆Skywayのサーバーとの接続よりも前にピアIDを確定しないといけないのでピアIDの自動生成を使えなない
@@ -46,10 +45,11 @@ public class APIUtils {
 	public static synchronized String getPeerId(@NonNull final Context context) {
 		final SharedPreferences preferences = getPreferences(context);
 		String peerId
-			= preferences.getString(PREF_KEY_PEER_ID, null);
+			= preferences.getString(Const.PREF_KEY_PEER_ID, null);
 		if (TextUtils.isEmpty(peerId)) {
 			peerId = UUID.randomUUID().toString();
-			preferences.edit().putString(PREF_KEY_PEER_ID, peerId).apply();
+			peerId = peerId.replace("-", "");
+			preferences.edit().putString(Const.PREF_KEY_PEER_ID, peerId).apply();
 		}
 		return peerId;
 	}
@@ -118,7 +118,7 @@ public class APIUtils {
 	}
 
 	@NonNull
-	private static SharedPreferences getPreferences(@NonNull final Context context) {
+	public static SharedPreferences getPreferences(@NonNull final Context context) {
 		return context.getSharedPreferences(
 			context.getPackageName(), Context.MODE_PRIVATE);
 	}
