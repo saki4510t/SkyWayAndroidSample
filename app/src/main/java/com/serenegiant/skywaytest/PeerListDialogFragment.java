@@ -35,6 +35,9 @@ public class PeerListDialogFragment extends DialogFragment
 	private PeerListDialogFragmentListener	_listener;
 	private ArrayList<String> _items;
 
+	public PeerListDialogFragment() {
+		super();
+	}
 
 	@Nullable
 	@Override
@@ -51,7 +54,7 @@ public class PeerListDialogFragment extends DialogFragment
 		window.setLayout(ptSize.x * 2 / 3, ptSize.y * 2 / 3);
 
 		View vwDialog = inflater.inflate(R.layout.fragment_dialog_peerlist, container, false);
-		_lvList = (ListView)vwDialog.findViewById(R.id.listView);
+		_lvList = vwDialog.findViewById(R.id.listView);
 		_lvList.setOnItemClickListener(this);
 
 		return vwDialog;

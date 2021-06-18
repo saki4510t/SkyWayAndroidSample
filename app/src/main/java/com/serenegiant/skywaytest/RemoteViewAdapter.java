@@ -15,7 +15,7 @@ import io.skyway.Peer.Browser.MediaStream;
 class RemoteViewAdapter extends ArrayAdapter<RemoteViewAdapter.RemoteView> {
 	private static final String TAG = RemoteViewAdapter.class.getSimpleName();
 
-	class RemoteView {
+	static class RemoteView {
 		String peerId;
 		MediaStream stream;
 		Canvas canvas;
@@ -40,11 +40,11 @@ class RemoteViewAdapter extends ArrayAdapter<RemoteViewAdapter.RemoteView> {
 		if (null != item) {
 			if (null == item.viewHolder) {
 				item.viewHolder = inflater.inflate(R.layout.view_remote, parent, false);
-				TextView txvRemotePeerId = (TextView)item.viewHolder.findViewById(R.id.txvRemotePeerId);
+				TextView txvRemotePeerId = item.viewHolder.findViewById(R.id.txvRemotePeerId);
 				if (null != txvRemotePeerId) {
 					txvRemotePeerId.setText(item.peerId);
 				}
-				item.canvas = (Canvas)item.viewHolder.findViewById(R.id.cvsRemote);
+				item.canvas = item.viewHolder.findViewById(R.id.cvsRemote);
 				item.stream.addVideoRenderer(item.canvas, 0);
 				view = item.viewHolder;
 			} else {

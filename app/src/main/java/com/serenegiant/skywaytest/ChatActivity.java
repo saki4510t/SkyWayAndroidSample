@@ -336,9 +336,9 @@ abstract class ChatActivity extends Activity {
 
 		if (_peer != null) {
 			unsetPeerCallback(_peer);
-			if (!_peer.isDisconnected()) {
-				_peer.disconnect();
-			}
+//			if (!_peer.isDisconnected()) {
+//				_peer.disconnect();
+//			}
 
 			if (!_peer.isDestroyed()) {
 				_peer.destroy();
@@ -401,13 +401,13 @@ abstract class ChatActivity extends Activity {
 			}
 		});
 
-		// DISCONNECTED
-		_peer.on(Peer.PeerEventEnum.DISCONNECTED, new OnCallback() {
-			@Override
-			public void onCallback(final Object object) {
-				Log.d(TAG, "[On/Disconnected]");
-			}
-		});
+//		// DISCONNECTED
+//		_peer.on(Peer.PeerEventEnum.DISCONNECTED, new OnCallback() {
+//			@Override
+//			public void onCallback(final Object object) {
+//				Log.d(TAG, "[On/Disconnected]");
+//			}
+//		});
 
 		// 認証トークンの有効期限がまもなく切れる時
 		_peer.on(Peer.PeerEventEnum.AUTH_EXPIRES_IN, new OnCallback() {
@@ -427,7 +427,7 @@ abstract class ChatActivity extends Activity {
 		peer.on(Peer.PeerEventEnum.OPEN, null);
 		peer.on(Peer.PeerEventEnum.CONNECTION, null);
 		peer.on(Peer.PeerEventEnum.CLOSE, null);
-		peer.on(Peer.PeerEventEnum.DISCONNECTED, null);
+//		peer.on(Peer.PeerEventEnum.DISCONNECTED, null);
 		peer.on(Peer.PeerEventEnum.ERROR, null);
 	}
 

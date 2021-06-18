@@ -168,7 +168,7 @@ public class SfuVideoChatActivity extends ChatActivity {
 				_room.on(Room.RoomEventEnum.PEER_JOIN, null);
 				_room.on(Room.RoomEventEnum.PEER_LEAVE, null);
 				_room.on(Room.RoomEventEnum.STREAM, null);
-				_room.on(Room.RoomEventEnum.REMOVE_STREAM, null);
+//				_room.on(Room.RoomEventEnum.REMOVE_STREAM, null);
 
 				_room = null;
 				_bConnected = false;
@@ -226,19 +226,19 @@ public class SfuVideoChatActivity extends ChatActivity {
 			}
 		});
 
-		_room.on(Room.RoomEventEnum.REMOVE_STREAM, new OnCallback() {
-			@Override
-			public void onCallback(final Object object) {
-				Log.d(TAG, "RoomEventEnum.REMOVE_STREAM: " + object);
-
-				if (!(object instanceof MediaStream)) return;
-
-				final MediaStream stream = (MediaStream)object;
-				Log.d(TAG, "peer = " + stream.getPeerId() + ", label = " + stream.getLabel());
-
-				_adapter.remove(stream);
-			}
-		});
+//		_room.on(Room.RoomEventEnum.REMOVE_STREAM, new OnCallback() {
+//			@Override
+//			public void onCallback(final Object object) {
+//				Log.d(TAG, "RoomEventEnum.REMOVE_STREAM: " + object);
+//
+//				if (!(object instanceof MediaStream)) return;
+//
+//				final MediaStream stream = (MediaStream)object;
+//				Log.d(TAG, "peer = " + stream.getPeerId() + ", label = " + stream.getLabel());
+//
+//				_adapter.remove(stream);
+//			}
+//		});
 
 		// Update UI
 		updateActionButtonTitle();

@@ -111,7 +111,7 @@ public class P2pVideoChatActivity extends ChatActivity {
 		if (_mediaConnection != null) {
 			unsetMediaCallbacks(_mediaConnection);
 			if (_mediaConnection.isOpen()) {
-				_mediaConnection.close();
+				_mediaConnection.close(true);
 			}
 			_mediaConnection = null;
 		}
