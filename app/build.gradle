@@ -1,4 +1,8 @@
-apply plugin: 'com.android.application'
+plugins {
+	id 'com.android.application'
+	id 'kotlin-android'
+	id 'kotlin-kapt'
+}
 
 android {
 	compileSdkVersion versionCompiler
@@ -40,9 +44,16 @@ android {
 		}
 	}
 
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+
+	kotlinOptions.jvmTarget = "1.8"
 
 	buildFeatures {
 		dataBinding = true
+		buildConfig = true
 	}
 
 }
@@ -54,10 +65,24 @@ dependencies {
 	androidTestImplementation "androidx.test:runner:${androidXTestRunnerVersion}"
 	androidTestImplementation "androidx.test.espresso:espresso-core:${androidXEspressoVersion}"
 
+	//noinspection GradleDependency
 	implementation "androidx.appcompat:appcompat:${androidXVersion}"
 	implementation "androidx.legacy:legacy-support-v4:${androidXLegacyV4}"
+
 	implementation "com.google.android.material:material:${androidXMaterial}"
 	implementation "androidx.constraintlayout:constraintlayout:${androidXConstraint}"
+	implementation "androidx.recyclerview:recyclerview:${androidXRecyclerview}"
+	//noinspection GradleDependency
+	implementation "androidx.lifecycle:lifecycle-common-java8:${androidXLifeCycle}"
+
+	//noinspection GradleDependency
+	implementation "androidx.fragment:fragment-ktx:${androidXFragmentKts}"
+	//noinspection GradleDependency
+	implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidXLifecycleKtx}"
+	//noinspection GradleDependency
+	implementation "androidx.lifecycle:lifecycle-livedata-ktx:${androidXLifecycleKtx}"
+	//noinspection GradleDependency
+	kapt "androidx.lifecycle:lifecycle-common-java8:$androidXLifecycleKtx"
 
 	implementation "com.google.code.gson:gson:${gsonVersion}"
 	implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
