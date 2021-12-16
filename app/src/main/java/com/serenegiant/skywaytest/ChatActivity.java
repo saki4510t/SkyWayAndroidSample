@@ -2,6 +2,7 @@ package com.serenegiant.skywaytest;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -19,7 +20,15 @@ import com.serenegiant.skywaytest.api.model.PeerAuthResult;
 import com.serenegiant.utils.ThreadPool;
 
 import org.json.JSONArray;
+import org.webrtc.Camera1Enumerator;
+import org.webrtc.Camera2Enumerator;
+import org.webrtc.CameraEnumerator;
+import org.webrtc.EglBase;
+import org.webrtc.SurfaceTextureHelper;
+import org.webrtc.VideoCapturer;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import androidx.annotation.CallSuper;
@@ -315,9 +324,111 @@ abstract class ChatActivity extends Activity {
 		constraints.cameraPosition = MediaConstraints.CameraPositionEnum.FRONT;
 
 		Navigator.initialize(_peer);
+		if (true) {
+			// XXX リフレクションでPeer#nativeGetUserMediaへアクセスできるようにして任意映像ソースのMediaStreamを生成できるようにするお試し
+			// (とりあえずはオリジナルの#getUserMediaを時前実装)
+			try {
+				final Method _nativeGetUserMedia = _peer.getClass().getDeclaredMethod("nativeGetUserMedia", Context.class, MediaConstraints.class, SurfaceTextureHelper.class, VideoCapturer.class);
+				if (DEBUG) Log.v(TAG, "nativeGetUserMedia=" + _nativeGetUserMedia);
+				_nativeGetUserMedia.setAccessible(true);
+				_localStream = getUserMedia(_peer, _nativeGetUserMedia, constraints);
+				final Canvas canvas = findViewById(R.id.svLocalView);
+				_localStream.addVideoRenderer(canvas, 0);
+				return;
+			} catch (final Exception e) {
+				Log.w(TAG, e);
+			}
+		}
+		// うまくイカなかったときはフォールバックしてデフォルトの処理を呼ぶ出す
 		_localStream = Navigator.getUserMedia(constraints);
 		final Canvas canvas = findViewById(R.id.svLocalView);
 		_localStream.addVideoRenderer(canvas, 0);
+	}
+
+	/**
+	 * リフレクションで取得して実行可能にしたPeer#nativeGetUserMediaメソッドを使ってPeer#getUserMediaを自前実装
+	 * @param peer
+	 * @param nativeGetUserMedia
+	 * @param constraints
+	 * @return
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	@Nullable
+	private static MediaStream getUserMedia(
+		@NonNull final Peer peer,
+		@NonNull final Method nativeGetUserMedia,
+		@NonNull final MediaConstraints constraints) throws InvocationTargetException, IllegalAccessException {
+
+		MediaStream localStream = null;
+		final EglBase eglBase = peer.getEglBase();
+		if (eglBase != null) {
+			if (constraints.videoFlag) {
+				CameraEnumerator enumerator;
+				if (Camera2Enumerator.isSupported(peer.getContext())) {
+					enumerator = new Camera2Enumerator(peer.getContext());
+				} else {
+					enumerator = new Camera1Enumerator(true);
+				}
+
+				@Nullable
+				final VideoCapturer videoCapturer = createCameraCapturer(enumerator, constraints);
+				if (videoCapturer != null) {
+					final String[] deviceNames = enumerator.getDeviceNames();
+					final int n = deviceNames.length;
+
+					String frontCameraName = null;
+					String backCameraName = null;
+					for (int i = 0; i < n; i++) {
+						String deviceName = deviceNames[i];
+						if (frontCameraName == null && enumerator.isFrontFacing(deviceName)) {
+							frontCameraName = deviceName;
+						}
+						if (backCameraName == null && enumerator.isBackFacing(deviceName)) {
+							backCameraName = deviceName;
+						}
+					}
+					final SurfaceTextureHelper textureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
+					final long nativeMediaStream = (long) nativeGetUserMedia.invoke(peer, peer.getContext(), constraints, textureHelper, videoCapturer);
+					if (nativeMediaStream != 0L) {
+						localStream = new MediaStream(peer, nativeMediaStream, constraints, textureHelper, videoCapturer, frontCameraName, backCameraName);
+					} else {
+						textureHelper.dispose();
+					}
+				} // if (videoCapturer != null)
+			} // if (constraints.videoFlag)
+		} // if (eglBase != null)
+		return localStream;
+	}
+
+	@Nullable
+	private static VideoCapturer createCameraCapturer(CameraEnumerator enumerator, MediaConstraints constraints) {
+		boolean frontCamera = MediaConstraints.CameraPositionEnum.FRONT == constraints.cameraPosition;
+		final String[] deviceNames = enumerator.getDeviceNames();
+		boolean hasFrontCamera = false;
+		final int n = deviceNames.length;
+
+		String deviceName;
+		for (int i = 0; i < n; i++) {
+			deviceName = deviceNames[i];
+			if (enumerator.isFrontFacing(deviceName)) {
+				hasFrontCamera = true;
+				break;
+			}
+		}
+
+		for (int i = 0; i < n; i++) {
+			deviceName = deviceNames[i];
+			boolean isFrontFacing = enumerator.isFrontFacing(deviceName);
+			if (!hasFrontCamera || !frontCamera && !isFrontFacing || frontCamera && isFrontFacing) {
+				VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
+				if (null != videoCapturer) {
+					return videoCapturer;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	//
