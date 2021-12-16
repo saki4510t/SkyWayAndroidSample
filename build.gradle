@@ -57,7 +57,7 @@ ext {
 	androidXTestRunnerVersion = '1.3.0'
 	androidXEspressoVersion = '3.3.0'
 
-	skywaySDKVersion = '3.0.0'
+	skywaySDKVersion = '3.0.1'
 
 	gsonVersion = '2.8.5'
 	okHttpVersion = '3.12.1'
