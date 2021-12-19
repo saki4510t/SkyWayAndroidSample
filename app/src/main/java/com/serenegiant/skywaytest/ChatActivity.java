@@ -362,42 +362,40 @@ abstract class ChatActivity extends Activity {
 
 		MediaStream localStream = null;
 		final EglBase eglBase = peer.getEglBase();
-		if (eglBase != null) {
-			if (constraints.videoFlag) {
-				CameraEnumerator enumerator;
-				if (Camera2Enumerator.isSupported(peer.getContext())) {
-					enumerator = new Camera2Enumerator(peer.getContext());
-				} else {
-					enumerator = new Camera1Enumerator(true);
+		if ((eglBase != null) && constraints.videoFlag) {
+			CameraEnumerator enumerator;
+			if (Camera2Enumerator.isSupported(peer.getContext())) {
+				enumerator = new Camera2Enumerator(peer.getContext());
+			} else {
+				enumerator = new Camera1Enumerator(true);
+			}
+
+			@Nullable
+			final VideoCapturer videoCapturer = createCameraCapturer(enumerator, constraints);
+			if (videoCapturer != null) {
+				final String[] deviceNames = enumerator.getDeviceNames();
+				final int n = deviceNames.length;
+
+				String frontCameraName = null;
+				String backCameraName = null;
+				for (int i = 0; i < n; i++) {
+					String deviceName = deviceNames[i];
+					if (frontCameraName == null && enumerator.isFrontFacing(deviceName)) {
+						frontCameraName = deviceName;
+					}
+					if (backCameraName == null && enumerator.isBackFacing(deviceName)) {
+						backCameraName = deviceName;
+					}
 				}
-
-				@Nullable
-				final VideoCapturer videoCapturer = createCameraCapturer(enumerator, constraints);
-				if (videoCapturer != null) {
-					final String[] deviceNames = enumerator.getDeviceNames();
-					final int n = deviceNames.length;
-
-					String frontCameraName = null;
-					String backCameraName = null;
-					for (int i = 0; i < n; i++) {
-						String deviceName = deviceNames[i];
-						if (frontCameraName == null && enumerator.isFrontFacing(deviceName)) {
-							frontCameraName = deviceName;
-						}
-						if (backCameraName == null && enumerator.isBackFacing(deviceName)) {
-							backCameraName = deviceName;
-						}
-					}
-					final SurfaceTextureHelper textureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
-					final long nativeMediaStream = (long) nativeGetUserMedia.invoke(peer, peer.getContext(), constraints, textureHelper, videoCapturer);
-					if (nativeMediaStream != 0L) {
-						localStream = new MediaStream(peer, nativeMediaStream, constraints, textureHelper, videoCapturer, frontCameraName, backCameraName);
-					} else {
-						textureHelper.dispose();
-					}
-				} // if (videoCapturer != null)
-			} // if (constraints.videoFlag)
-		} // if (eglBase != null)
+				final SurfaceTextureHelper textureHelper = SurfaceTextureHelper.create("CaptureThread", eglBase.getEglBaseContext());
+				final long nativeMediaStream = (long) nativeGetUserMedia.invoke(peer, peer.getContext(), constraints, textureHelper, videoCapturer);
+				if (nativeMediaStream != 0L) {
+					localStream = new MediaStream(peer, nativeMediaStream, constraints, textureHelper, videoCapturer, frontCameraName, backCameraName);
+				} else {
+					textureHelper.dispose();
+				}
+			} // if (videoCapturer != null)
+		} // if ((eglBase != null) && constraints.videoFlag)
 		return localStream;
 	}
 
