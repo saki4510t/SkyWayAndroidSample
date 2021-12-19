@@ -399,8 +399,24 @@ abstract class ChatActivity extends Activity {
 		return localStream;
 	}
 
+	/**
+	 * VideoCapturerを取得
+	 * 今はCameraEnumeratorを使って内蔵カメラからの映像取得用のVideoCapturerを取得しているけど
+	 * VideoCapturerインターフェースしたインターフェース/クラスであれば何を返してもいい。
+	 * 例えばAppRTCMobileリポジトリにあるSurfaceVideoCaptureインターフェースや
+	 * SurfaceVideoDistributeCaptureインターフェースやそれを実装した
+	 * SurfaceCaptureAndroidSimpleクラスなど
+	 * …つまり任意の映像ソースを引き渡せるということでカメラ映像の背景をぼかしてから送信する
+	 * ということもできるようになる＼(^o^)／
+	 * @param enumerator
+	 * @param constraints
+	 * @return
+	 */
 	@Nullable
-	private static VideoCapturer createVideoCapturer(CameraEnumerator enumerator, MediaConstraints constraints) {
+	private static VideoCapturer createVideoCapturer(
+		@NonNull final CameraEnumerator enumerator,
+		@NonNull final MediaConstraints constraints) {
+
 		boolean frontCamera = MediaConstraints.CameraPositionEnum.FRONT == constraints.cameraPosition;
 		final String[] deviceNames = enumerator.getDeviceNames();
 		boolean hasFrontCamera = false;
