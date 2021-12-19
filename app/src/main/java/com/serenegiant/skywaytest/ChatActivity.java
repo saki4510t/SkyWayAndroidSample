@@ -371,7 +371,7 @@ abstract class ChatActivity extends Activity {
 			}
 
 			@Nullable
-			final VideoCapturer videoCapturer = createCameraCapturer(enumerator, constraints);
+			final VideoCapturer videoCapturer = createVideoCapturer(enumerator, constraints);
 			if (videoCapturer != null) {
 				final String[] deviceNames = enumerator.getDeviceNames();
 				final int n = deviceNames.length;
@@ -400,7 +400,7 @@ abstract class ChatActivity extends Activity {
 	}
 
 	@Nullable
-	private static VideoCapturer createCameraCapturer(CameraEnumerator enumerator, MediaConstraints constraints) {
+	private static VideoCapturer createVideoCapturer(CameraEnumerator enumerator, MediaConstraints constraints) {
 		boolean frontCamera = MediaConstraints.CameraPositionEnum.FRONT == constraints.cameraPosition;
 		final String[] deviceNames = enumerator.getDeviceNames();
 		boolean hasFrontCamera = false;
